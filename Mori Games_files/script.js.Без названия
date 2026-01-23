@@ -1,0 +1,184 @@
+// Меню
+
+let burger = document.querySelector('.burger');
+let navMenu = document.querySelector('.nav-menu-wr');
+let navLinks = document.querySelectorAll('.nav-menu-wr a');
+
+burger.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+  burger.classList.toggle('active');
+
+  document.body.classList.toggle('no-scroll', navMenu.classList.contains('active'));
+});
+
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    navMenu.classList.remove('active');
+    burger.classList.remove('active');
+
+    document.body.classList.remove('no-scroll');
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if(!navMenu.contains(e.target) && !burger.contains(e.target)) {
+    navMenu.classList.remove('active');
+    burger.classList.remove('active');
+
+    document.body.classList.remove('no-scroll');
+  }
+})
+// Меню - конец
+
+
+// Хранилище ссылок
+const links = {
+  marketplace: "https://m3ga.at/",
+  telegram: "https://t.me/Mega_RF_BOT",
+  hidemega: "https://hidemega.to"
+};
+
+// Находим все элементы с классом .btn (не важно, div, a, button и т.д.)
+document.querySelectorAll(".navLinks").forEach(el => {
+  const key = el.dataset.link;
+  const url = links[key];
+
+  if (url) {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.open(url, "_blank");
+    });
+
+    // Для ссылок <a>, чтобы убрать стандартное поведение перехода
+    if (el.tagName.toLowerCase() === "a") {
+      el.href = "#";
+    }
+
+    // Можно также добавить курсор и стили кликабельности
+    el.style.cursor = "pointer";
+  }
+});
+
+
+// Адаптивный контейнер кнопок
+function adjustButtonsLayout() {
+  const containers = document.querySelectorAll('.buttons');
+
+  containers.forEach(container => {
+    const buttons = container.querySelectorAll('button');
+    if (buttons.length < 2) return; // на всякий случай
+
+    container.classList.remove('stack');
+
+    const containerWidth = container.clientWidth;
+    const totalButtonsWidth =
+      buttons[0].offsetWidth +
+      buttons[1].offsetWidth +
+      parseInt(getComputedStyle(container).gap || 0);
+
+    if (totalButtonsWidth > containerWidth) {
+      container.classList.add('stack');
+    }
+  });
+}
+
+window.addEventListener('load', adjustButtonsLayout);
+window.addEventListener('resize', adjustButtonsLayout);
+
+// Адаптивный контейнер кнопок - конец
+
+
+
+// Список победителей
+
+const winnersData = [
+  { name: "Maks_na_sv", combo: "Большой стрит", prize: "30 000₽", avatar: "https://i.pravatar.cc/150?img=58" },
+  { name: "Katya_goes", combo: "Карэ", prize: "15 000₽", avatar: "https://i.pravatar.cc/150?img=52" },
+  { name: "Maximus_v_code", combo: "Стрит", prize: "iPhone", avatar: "https://i.pravatar.cc/150?img=38" },
+  { name: "Gemini", combo: "Пара с кикером", prize: "PROMO 500₽", avatar: "https://i.pravatar.cc/150?img=24" },
+  { name: "Mira12", combo: "Фулл-хаус", prize: "MacBook Pro", avatar: "https://i.pravatar.cc/150?img=8" },
+  { name: "Acteryx", combo: "Флеш", prize: "Тур на море", avatar: "https://i.pravatar.cc/150?img=5" },
+  { name: "Nikitabash", combo: "Большой стрит", prize: "30 000₽", avatar: "https://i.pravatar.cc/150?img=9" },
+  { name: "Nochnee", combo: "Карэ", prize: "15 000₽", avatar: "https://i.pravatar.cc/150?img=11" },
+  { name: "Maximus", combo: "Стрит", prize: "iPhone", avatar: "https://i.pravatar.cc/150?img=15" },
+  { name: "Gemini", combo: "Пара с кикером", prize: "PROMO 500₽", avatar: "https://i.pravatar.cc/150?img=25" },
+  { name: "Mira12", combo: "Фулл-хаус", prize: "MacBook Pro", avatar: "https://i.pravatar.cc/150?img=28" },
+  { name: "Acteryx", combo: "Флеш", prize: "Тур на море", avatar: "https://i.pravatar.cc/150?img=36" },
+];
+
+const winnersContainer = document.getElementById('winners');
+
+function renderWinners() {
+  winnersContainer.innerHTML = '';
+  winnersData.forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'winner-card';
+    card.innerHTML = `
+      <div class="winner-meta">
+        <div class="avatar" style="background-image: url('${w.avatar || ""}')"></div>
+        <div>
+          <h4>${w.name}</h4>
+          <p>${w.combo}</p>
+        </div>
+      </div>
+      <p class="winner-amount">${w.prize}</p>
+    `;
+    winnersContainer.appendChild(card);
+  });
+}
+
+renderWinners();
+
+// Список победителей конец
+
+
+// Рандомайзер для карт
+
+const drawBtn = document.getElementById("drawBtn");
+const cards = document.querySelectorAll(".flip-card .flip-inner");
+
+// Список карт
+const allCards = [
+  "chervi_6.png", "chervi_7.png", "chervi_8.png", "chervi_9.png", "chervi_10.png",
+  "chervi_J.png", "chervi_Q.png", "chervi_K.png", "chervi_A.png",
+  "piki_6.png", "piki_7.png", "piki_8.png", "piki_9.png", "piki_10.png",
+  "piki_J.png", "piki_Q.png", "piki_K.png", "piki_A.png",
+  "trefy_6.png", "trefy_7.png", "trefy_8.png", "trefy_9.png", "trefy_10.png",
+  "trefy_J.png", "trefy_Q.png", "trefy_K.png", "trefy_A.png"
+];
+
+drawBtn.addEventListener("click", () => {
+  const randomCard = cards[Math.floor(Math.random() * cards.length)];
+  const randomFace = allCards[Math.floor(Math.random() * allCards.length)];
+  const frontImg = randomCard.querySelector(".front img");
+  frontImg.src = `img/${randomFace}`;
+
+  randomCard.classList.add("flipped");
+
+  setTimeout(() => {
+    randomCard.classList.remove("flipped");
+  }, 2000);
+});
+
+// Рандомайзер для карт конец
+
+
+// Вопросы раскрывающийся список
+
+const faqQuestions = document.querySelectorAll('.faq-question');
+
+faqQuestions.forEach(question => {
+  question.addEventListener('click', () => {
+    const answer = question.nextElementSibling;
+
+    if(answer.style.display === 'block') {
+      answer.style.display = 'none';
+      question.querySelector('span').textContent = '+';
+    } else {
+      answer.style.display = 'block';
+      question.querySelector('span').textContent = '-';
+    }
+  });
+});
+
+// Вопросы раскрывающийся список - конец
